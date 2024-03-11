@@ -23,7 +23,7 @@ extern volatile uint32_t		gWarpI2cBaudRateKbps;
 extern volatile uint32_t		gWarpI2cTimeoutMilliseconds;
 extern volatile uint32_t		gWarpSupplySettlingDelayMilliseconds;
 
-
+uint32_t NRsqrt(uint32_t radicand)
 
 
 void tempoAlgorithm(){
@@ -48,6 +48,6 @@ void tempoAlgorithm(){
 	zAcc = ((zMSB & 0xFF) << 6) | (zLSB >> 2);
     zAcc = (zAcc ^ (1 << 13)) - (1 << 13);
 
-    uint32_t accMagnitude = sqrt((uint32_t)(xAcc*xAcc) + (uint32_t)(yAcc*yAcc) + (uint32_t)(zAcc*zAcc));
+    uint32_t accMagnitude = ((uint32_t)(xAcc*xAcc) + (uint32_t)(yAcc*yAcc) + (uint32_t)(zAcc*zAcc));
     
 }
