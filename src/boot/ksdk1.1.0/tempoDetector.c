@@ -1,5 +1,5 @@
 #include <math.h>
- */
+ 
 #include "config.h"
 
 #include "fsl_misc_utilities.h"
