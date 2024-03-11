@@ -22,7 +22,7 @@ volatile uint8_t	payloadBytes[1];
  */
 enum
 {
-	kSSD1331PinMOSI		= GPIO_MAKE_PIN(HW_GPIOA, 8),
+	kSSD1331PinMOSI		= GPIO_MAKE_PIN(HW_GPIOA, 7),
 	kSSD1331PinSCK		= GPIO_MAKE_PIN(HW_GPIOA, 9),
 	kSSD1331PinCSn		= GPIO_MAKE_PIN(HW_GPIOB, 13),
 	kSSD1331PinDC		= GPIO_MAKE_PIN(HW_GPIOA, 12),
@@ -74,10 +74,10 @@ devSSD1331init(void)
 	 *
 	 *	Re-configure SPI to be on PTA8 and PTA9 for MOSI and SCK respectively.
 	 */
-	PORT_HAL_SetMuxMode(PORTA_BASE, 8u, kPortMuxAlt3);
+	PORT_HAL_SetMuxMode(PORTA_BASE, 7u, kPortMuxAlt3);
 	PORT_HAL_SetMuxMode(PORTA_BASE, 9u, kPortMuxAlt3);
 
-	enableSPIpins();
+	warpEnableSPIpins();
 
 	/*
 	 *	Override Warp firmware's use of these pins.
@@ -131,7 +131,7 @@ devSSD1331init(void)
 	writeCommand(kSSD1331CommandVCOMH);		// 0xBE
 	writeCommand(0x3E);
 	writeCommand(kSSD1331CommandMASTERCURRENT);	// 0x87
-	writeCommand(0x06);
+	writeCommand(0x0F);
 	writeCommand(kSSD1331CommandCONTRASTA);		// 0x81
 	writeCommand(0x91);
 	writeCommand(kSSD1331CommandCONTRASTB);		// 0x82
@@ -154,13 +154,38 @@ devSSD1331init(void)
 	writeCommand(0x00);
 	writeCommand(0x5F);
 	writeCommand(0x3F);
+	
+	writeCommand(kSSD1331CommandCONTRASTA);
+	writeCommand(0xFF);
+	writeCommand(kSSD1331CommandCONTRASTB);
+	writeCommand(0xFF);
+	writeCommand(kSSD1331CommandCONTRASTC);
+	writeCommand(0xFF);
 
+	writeCommand(kSSD1331CommandPRECHARGELEVEL);
+	writeCommand(0x3E);
+	writeCommand(kSSD1331CommandPRECHARGEA);
+	writeCommand(0xFF);
+	writeCommand(kSSD1331CommandPRECHARGEB);
+	writeCommand(0xFF);
+	writeCommand(kSSD1331CommandPRECHARGEC);
+	writeCommand(0xFF);
 
+	writeCommand(kSSD1331CommandDRAWRECT);
+	
+	writeCommand(0x00);
+	writeCommand(0x00);
+	
+	writeCommand(0x5F);
+	writeCommand(0x3F);
 
-	/*
-	 *	Any post-initialization drawing commands go here.
-	 */
-	//...
+	writeCommand(0x00);
+	writeCommand(0x3F);
+	writeCommand(0x00);
+
+	writeCommand(0x00);
+	writeCommand(0x3F);
+	writeCommand(0x00);
 
 
 

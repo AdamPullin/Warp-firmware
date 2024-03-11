@@ -56,6 +56,7 @@
 #include "SEGGER_RTT.h"
 #include "warp.h"
 
+#include "devMMA8451Q.h"
 
 extern volatile WarpI2CDeviceState	deviceMMA8451QState;
 extern volatile uint32_t		gWarpI2cBaudRateKbps;
@@ -69,6 +70,11 @@ initMMA8451Q(const uint8_t i2cAddress, uint16_t operatingVoltageMillivolts)
 {
 	deviceMMA8451QState.i2cAddress			= i2cAddress;
 	deviceMMA8451QState.operatingVoltageMillivolts	= operatingVoltageMillivolts;
+	uint8_t configErrors=0;
+	configErrors += configureSensorMMA8451Q(
+		0x00, /* Payload: Disable FIFO */
+		0x01  /* Normal read 8bit, 800Hz, normal, active mode */
+	);
 
 	return;
 }

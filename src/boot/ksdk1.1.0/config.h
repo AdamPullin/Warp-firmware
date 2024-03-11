@@ -59,7 +59,7 @@
  *	The commented line below should never be uncommented. It is just here to stress a point that
  *	you shouldn't try to enable the Glaux build in this way.
  */
-// #define		WARP_BUILD_ENABLE_FRDMKL03			0
+ #define		WARP_BUILD_ENABLE_FRDMKL03			1
 
 /*
  *	Force the required configuration if WARP_BUILD_ENABLE_GLAUX_VARIANT is set
@@ -104,6 +104,7 @@
 #define WARP_BUILD_ENABLE_DEVLPS25H   0
 #define WARP_BUILD_ENABLE_DEVMAG3110  0
 #define WARP_BUILD_ENABLE_DEVMMA8451Q 1
+#define WARP_BUILD_ENABLE_DEVINA219	  1
 #define WARP_BUILD_ENABLE_DEVRV8803C7 0
 #define WARP_BUILD_ENABLE_DEVSI4705   0
 #define WARP_BUILD_ENABLE_DEVSI7021   0
@@ -161,7 +162,7 @@ typedef enum
 	 */
 	kWarpDefaultPrintBufferSizeBytes       = 64,
 	kWarpMemoryCommonSpiBufferBytes        = 64,
-	kWarpSizesI2cBufferBytes               = 4,
+	kWarpSizesI2cBufferBytes               = 6,
 	kWarpSizesSpiBufferBytes               = 7,
 	kWarpSizesUartBufferBytes              = 8,
 	kWarpSizesBME680CalibrationValuesCount = 41,
@@ -197,4 +198,5 @@ typedef enum
 	kWarpDefaultSupplyVoltageMillivoltsISL23415    = 1800,
 	kWarpDefaultSupplyVoltageMillivoltsAT45DB      = 1800,
 	kWarpDefaultSupplyVoltageMillivoltsICE40       = 1800,
+	kWarpDefaultSupplyVoltageMillivoltsINA219	   = 1800,
 } WarpDefaults;

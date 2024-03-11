@@ -95,6 +95,7 @@ typedef enum
 	kWarpSensorTCS34725,
 	kWarpSensorSI4705,
 	kWarpSensorHDC1000,
+	kWarpSensorINA219,
 	kWarpSensorSI7021,
 	kWarpSensorAMG8834,
 	kWarpSensorCCS811,

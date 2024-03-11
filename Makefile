@@ -30,6 +30,7 @@ warp:
 	cp src/boot/ksdk1.1.0/devSI7021.*				build/ksdk1.1/work/demos/Warp/src/
 	cp src/boot/ksdk1.1.0/devL3GD20H.*				build/ksdk1.1/work/demos/Warp/src/
 	cp src/boot/ksdk1.1.0/devBME680.*				build/ksdk1.1/work/demos/Warp/src/
+	cp src/boot/ksdk1.1.0/devINA219.*				build/ksdk1.1/work/demos/Warp/src/
 	cp src/boot/ksdk1.1.0/devTCS34725.*				build/ksdk1.1/work/demos/Warp/src/
 	cp src/boot/ksdk1.1.0/devSI4705.*				build/ksdk1.1/work/demos/Warp/src/
 	cp src/boot/ksdk1.1.0/devCCS811.*				build/ksdk1.1/work/demos/Warp/src/
@@ -99,6 +100,8 @@ frdmkl03:
 	cp src/boot/ksdk1.1.0/glaux.h					build/ksdk1.1/work/boards/Warp
 	cp src/boot/ksdk1.1.0/CMakeLists-FRDMKL03.txt			build/ksdk1.1/work/demos/Warp/armgcc/Warp/CMakeLists.txt
 	cp src/boot/ksdk1.1.0/devMMA8451Q.*				build/ksdk1.1/work/demos/Warp/src/
+	cp src/boot/ksdk1.1.0/devINA219.*				build/ksdk1.1/work/demos/Warp/src/
+	cp src/boot/ksdk1.1.0/devSSD1331.*				build/ksdk1.1/work/demos/Warp/src/
 	cd build/ksdk1.1/work/lib/ksdk_platform_lib/armgcc/KL03Z4 && ./clean.sh; ./build_release.sh
 	cd build/ksdk1.1/work/demos/Warp/armgcc/Warp && ./clean.sh; ./build_release.sh
 	@echo "\n\nNow, run\n\n\tmake load-warp\n\n"

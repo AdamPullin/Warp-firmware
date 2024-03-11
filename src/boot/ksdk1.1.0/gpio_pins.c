@@ -166,6 +166,36 @@ gpio_output_pin_user_config_t	outputPins[] = {
 			.config.driveStrength = kPortLowDriveStrength,
 		},
 	#elif (WARP_BUILD_ENABLE_FRDMKL03)
+		{
+			.pinName = kWarpPinCS,
+			.config.outputLogic = 1,
+			.config.slewRate = kPortSlowSlewRate,
+			.config.driveStrength = kPortLowDriveStrength,
+		},
+                {
+                        .pinName = kWarpPinRST,
+                        .config.outputLogic = 1,
+                        .config.slewRate = kPortSlowSlewRate,
+                        .config.driveStrength = kPortLowDriveStrength,
+                },
+                {
+                        .pinName = kWarpPinDC,
+                        .config.outputLogic = 1,
+                        .config.slewRate = kPortSlowSlewRate,
+                        .config.driveStrength = kPortLowDriveStrength,
+                },
+                {
+                        .pinName = kWarpPinSCK,
+                        .config.outputLogic = 1,
+                        .config.slewRate = kPortSlowSlewRate,
+                        .config.driveStrength = kPortLowDriveStrength,
+                },
+                {
+                        .pinName = kWarpPinMOSI,
+                        .config.outputLogic = 1,
+                        .config.slewRate = kPortSlowSlewRate,
+                        .config.driveStrength = kPortLowDriveStrength,
+                },
 
 	#endif
 
