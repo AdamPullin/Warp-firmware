@@ -1950,7 +1950,10 @@ main(void)
 */
 
 warpPrint("tempo classifier started");
+//for (int i = 0; i < 1000; i++)
+//	{
 tempoAlgorithm();
+//	}
 warpPrint("tempo classifier done");
 gWarpExtraQuietMode = _originalWarpExtraQuietMode;
 	
