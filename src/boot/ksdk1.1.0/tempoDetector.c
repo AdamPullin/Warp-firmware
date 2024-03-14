@@ -49,12 +49,18 @@ void tempoAlgorithm(){
     uint16_t xLSB, xMSB, yLSB, yMSB, zLSB, zMSB;
     int16_t xAcc, yAcc, zAcc;
     WarpStatus i2cReadStatus;
-
+    int32_t starttime;
+    int32_t endtime;
     uint16_t filled = 0;
+
 
 
 for (int i = 0; i < 1000; i++)
 {
+
+    starttime = OSA_TimeGetMsec();
+    
+
     i2cReadStatus = readSensorRegisterMMA8451Q(kWarpSensorOutputRegisterMMA8451QOUT_X_MSB, 6 /* numberOfBytes */);
 	xMSB = deviceMMA8451QState.i2cBuffer[0];
 	xLSB = deviceMMA8451QState.i2cBuffer[1];
@@ -99,21 +105,16 @@ for (int i = 0; i < 1000; i++)
         if (filteredVals[23] > threshold)
         {
             uint32_t timeNow = OSA_TimeGetMsec();
-            warpPrint("timeLOOP %d", timeNow);
-            warpPrint("OSAGET %d", OSA_TimeGetMsec);
-            warpPrint(" BEAT DETECTED %d: %d 22: %d 24: %d \n",   magAccVals[23], filteredVals[23], filteredVals[22], filteredVals[24]);
+            //warpPrint(" BEAT DETECTED  \n");
             beatCount++;
             if (delayIndex == 0)
             {
                 delayIndex++;
                 lastBeatTime = timeNow;
-                warpPrint(" timenow: %d \n",   timeNow);
             }
             else
             {
-                warpPrint(" last time: %d \n",   lastBeatTime);
-                beatDelays[delayIndex] = timeNow-lastBeatTime;
-                warpPrint(" delay: %d \n",   beatDelays[delayIndex]);
+                beatDelays[delayIndex-1] = timeNow-lastBeatTime;
                 delayIndex++;
                 lastBeatTime = timeNow;
                 
@@ -121,29 +122,127 @@ for (int i = 0; i < 1000; i++)
         }
     }
     
-        warpPrint(" %d: %d \n",   magAccVals[24], filteredVals[24]);
+        //warpPrint(" %d: %d \n",   magAccVals[24], filteredVals[24]);
+        warpPrint(" end time: %d \n",   (OSA_TimeGetMsec()-starttime));
+
 
     }
-
- 
-
-
 
 }
-if (delayIndex > 1)
+if (beatCount > 1)
 {
-    int averagePeriod;
-    for (int j=0; j<delayIndex; j++)
+    //int averagePeriod;
+    //for (int j=0; j<delayIndex; j++)
+    //{
+    //    averagePeriod += beatDelays[j];
+    //}
+    //averagePeriod /= (beatCount-1);
+    //warpPrint(" beat count: %d \n",   beatCount);
+    //warpPrint(" ave period: %d \n",   averagePeriod);
+    //int averageTempo = (60*1000)/averagePeriod;
+    //warpPrint(" ave tempo: %d \n",   averageTempo);
+    for (int j=0; j<delayIndex-1; j++)
     {
-        averagePeriod += beatDelays[j];
-        warpPrint(" sum: j= %d  delay= %d \n",   j, beatDelays[j]);
+        int delayIn = beatDelays[j];
+        int bpmIn = 60000/delayIn;
+        if (delayIn > 865)
+        {
+            bins[0] += 400;
+        }
+        else if (delayIn < 392 && delayIn > 0)
+        {
+            warpPrint("%d speedy, \n", delayIn);
+            bins[9] += 400;
+        }
+        else if (delayIn > 0)
+        {
+            int binIndex = (bpmIn/10) -6;
+
+            //check lower BPM threshold
+            if (bin_thresholds[binIndex] - delayIn  < 9 )
+            {
+                int add = 200+(bin_thresholds[binIndex] - delayIn)* 25;
+                bins[binIndex] += add;
+                bins[binIndex-1] += (400-add);
+                
+            }
+
+            //check upper BPM threshold
+            else if (delayIn - bin_thresholds[binIndex+1] < 9) 
+            {
+                int add = 200 + (delayIn - bin_thresholds[binIndex+1])*25;
+                bins[binIndex] += add;
+                bins[binIndex+1] += (400-add);
+            }
+
+            //otherwise securely in current bin
+            else
+            {
+                warpPrint("%d is securely in bin %d, \n", delayIn, binIndex);
+                bins[binIndex]+= 400;
+            }
+
+        }
+         warpPrint(" ncompile test \n");
     }
-    warpPrint(" sum: %d \n",   averagePeriod);
-    averagePeriod /= delayIndex;
-    warpPrint(" beat count: %d \n",   beatCount);
-    warpPrint(" ave period: %d \n",   averagePeriod);
-    int averageTempo = (60*1000)/averagePeriod;
-    warpPrint(" ave tempo: %d \n",   averageTempo);
+
+    //ensure percentage probabilities add up to 100 (rounding errors)
+    int dividedsum = 0;
+    int divisor = (4*(delayIndex-1));
+    int counter = 1;
+    
+    for(int p = 0; p < 10; p++)
+    {
+        dividedsum += (bins[p])/divisor;
+        binremainders[p] = (bins[p]) % divisor;
+        bins[p] = bins[p]/divisor;
+        //warpPrint(" bin %d: %d \n",p, ((bins[p])/divisor));
+    }
+    while (dividedsum != 100)
+    {
+        if (dividedsum<100)
+        {
+            dividedsum=0;
+            for (int k = 0; k<10; k++)
+            {
+                if (binremainders[k] == divisor-1)
+                {
+                    bins[k]++;
+                    binremainders[k]=0;
+                    break;
+                }
+                
+            }    
+            divisor--;
+        } 
+
+        if (dividedsum>100)
+        {
+            dividedsum=0;
+            for (int k = 0; k<10; k++)
+            {
+                if (binremainders[k] == counter)
+                {
+                    bins[k]--;
+                    binremainders[k]=1000;
+                    break;
+                }
+            }
+            counter++;
+        } 
+
+        for (int k = 0; k<10; k++)
+            {
+                dividedsum+=bins[k];
+            }
+    }
+    
+    for(int p = 0; p < 10; p++)
+    {
+        warpPrint(" bin %d: %d \n",p, ((bins[p])));
+    }
+    // make percentages add to 100: eg scale by beatcount; int biggest = 0; for i in bins, sum += i, ; if i>biggest biggest = i, i+= 100 - sum; 
+
 }
 else
 {

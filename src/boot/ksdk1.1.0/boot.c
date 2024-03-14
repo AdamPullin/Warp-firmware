@@ -1928,7 +1928,7 @@ main(void)
 	bool _originalWarpExtraQuietMode = gWarpExtraQuietMode;
 	gWarpExtraQuietMode = false;
 	
-	devSSD1331init();
+	//devSSD1331init();
 
 	warpPrint("Press any key to show menu...\n");
 
