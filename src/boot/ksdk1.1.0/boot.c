@@ -1930,9 +1930,9 @@ main(void)
 	
 	//devSSD1331init();
 
-	warpPrint("Press any key to show menu...\n");
+	//warpPrint("Press any key to show menu...\n");
 
-/*
+/* CW3
 	for (int i = 0; i < 1000; i++)
 	{
 	// Write config, calibration registers
@@ -1949,12 +1949,14 @@ main(void)
 }
 */
 
-warpPrint("tempo classifier started");
-//for (int i = 0; i < 1000; i++)
-//	{
+// CALL TEMPO ALGORITHM
+warpPrint("tempo classifier started \n");
+
 tempoAlgorithm();
-//	}
-warpPrint("tempo classifier done");
+
+warpPrint("tempo classifier done, press reset button to restart \n");
+
+
 gWarpExtraQuietMode = _originalWarpExtraQuietMode;
 	
 	while (rttKey < 0 && timer < kWarpCsvstreamMenuWaitTimeMilliSeconds)
